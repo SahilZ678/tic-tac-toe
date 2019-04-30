@@ -10,16 +10,17 @@ $(document).ready(function () {
 
     message.text(`X's turn`);
 
-    // $('td').on('mouseenter', function () {
-    //     if (player === 1) {
-    //         $(this).addClass('crosshover')
-    //     } else if (player === 2) {
-    //         $(this).addClass('criclehover')
-    //     }
-    // }).on('mouseleave', function () {
-    //     $(this).removeClass('circlehover')
-    //     console.log($(this))
-    // })
+    $('td').on('mouseenter', function () {
+        td = $(this)
+        if (player === 1) {
+            td.addClass('crosshover')
+        } else if (player === 2) {
+            td.addClass('circlehover')
+        }
+    }).on('mouseleave', function () {
+        console.log('mouseleft');
+        $(this).removeClass('circlehover').removeClass('crosshover')
+    });
 
 
 
@@ -59,7 +60,7 @@ $(document).ready(function () {
             // td.removeClass('circlehover');
             // td.removeClass('crosshover');
             player = 1;
-            win = hasPlayerWon(table, pattern);
+            win = hasPlayerWon();
 
             if (win == 1) {
                 message.text(`O has Won`).css({
@@ -78,7 +79,7 @@ $(document).ready(function () {
                 reset();
             }, 3000)
         }
-        // td.unbind('mouseenter mouseleave');
+        td.unbind('mouseenter');
     });
 
 
@@ -93,8 +94,8 @@ function reset() {
     location.reload(true);
 }
 
-function hasPlayerWon(table, pattern) {
-    win = 0;
+function hasPlayerWon() {
+    // win = 0;
     var winningCondition = [
         [1, 2, 3],
         [4, 5, 6],
@@ -110,7 +111,6 @@ function hasPlayerWon(table, pattern) {
         if (cells[winCond[0]] !== 0 && cells[winCond[0]] === cells[winCond[1]] && cells[winCond[1]] === cells[winCond[2]]) {
             return 1;
         }
-
     }
     var allCellsFilled = 1;
     for (var index = 1; index < cells.length; index++) {
@@ -121,6 +121,8 @@ function hasPlayerWon(table, pattern) {
     }
     if (allCellsFilled) {
         return 'draw';
+    } else {
+        return 0;
     }
     // if (table.find('#1').hasClass(pattern) && table.find('#2').hasClass(pattern) && table.find('#3').hasClass(pattern)) {
     //     win = 1;
