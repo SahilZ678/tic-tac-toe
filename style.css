@@ -1,0 +1,44 @@
+table {
+  width: 500px;
+  height: 500px;
+  border-collapse: collapse;
+}
+
+td {
+  width: 33.33%;
+  border: 5px solid black;
+}
+
+.black {
+  background-color: black;
+}
+
+.cross {
+  background-image: url("./X.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.circle {
+  background-image: url("./O.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.crosshover {
+  background-image: url("./X.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  opacity: 0.1;
+}
+
+.circlehover {
+  background-image: url("./O.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  opacity: 0.1;
+}
