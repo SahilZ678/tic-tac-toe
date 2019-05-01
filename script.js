@@ -1,136 +1,178 @@
-var arr = [[], [], [], [], [], [], []];
-var length = 7;
-$(document).ready(function() {
-  //   var table = $("table");
-  var player = 1;
-  var pattern;
+var arr = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+];
+var length;
+var movecount = 0;
+$(document).ready(function () {
+    //   var table = $("table");
 
-  var message = $(".message");
+    var player = 1;
+    var pattern;
 
-  message.text(`X's turn`);
+    $('.setTable').click(function () {
 
-  $("td")
-    .on("mouseenter", function() {
-      td = $(this);
-      if (player === 1) {
-        td.addClass("crosshover");
-      } else if (player === 2) {
-        td.addClass("circlehover");
-      }
-    })
-    .on("mouseleave", function() {
-      $(this)
-        .removeClass("circlehover")
-        .removeClass("crosshover");
+        length = $('input').val();
+        $('input').hide();
+        $('.setTable').hide();
+
+        var table_body = '<table>'
+        for (var i = 0; i < length; i++) {
+            table_body += '<tr>';
+
+            for (var j = 0; j < length; j++) {
+                table_body += '<td data-id="' + i + '" data-filter="' + j + '">';
+                table_body += '</td>';
+            }
+            table_body += '</tr>'
+        }
+        table_body += '</table>'
+        $('.tableDiv').html(table_body);
+
+        var message = $(".message");
+        message.text(`X's turn`);
+
+        $("td").on("mouseenter", function () {
+                td = $(this);
+                if (player === 1) {
+                    td.addClass("crosshover");
+                } else if (player === 2) {
+                    td.addClass("circlehover");
+                }
+            })
+            .on("mouseleave", function () {
+                $(this)
+                    .removeClass("circlehover")
+                    .removeClass("crosshover");
+            });
+
+        $("td").one("click", function () {
+            // console.log(cells)
+            movecount++;
+            td = $(this);
+            var X = td.data("id");
+            var Y = td.data("filter");
+            console.log(X, Y);
+            if (player == 1) {
+                message.text(`O's turn`);
+                pattern = "cross";
+                td.addClass(pattern);
+                arr[X][Y] = "X";
+                //   cells.splice(id, 1, "X");
+                player = 2;
+                win = hasPlayerWon(X, Y, "X");
+                if (win == 1) {
+                    message.text(`X has Won`).css({
+                        color: "red"
+                    });
+                    setTimeout(function () {
+                        reset();
+                    }, 2000);
+                }
+            } else if (player == 2) {
+                message.text(`X's turn`);
+                pattern = "circle";
+                td.addClass(pattern);
+
+                arr[X][Y] = "O";
+                //   cells.splice(id, 1, "O");
+                player = 1;
+                win = hasPlayerWon(X, Y, "O");
+
+                if (win == 1) {
+                    message.text(`O has Won`).css({
+                        color: "blue"
+                    });
+                    setTimeout(function () {
+                        reset();
+                    }, 2000);
+                }
+            }
+            if (win == "draw") {
+                message.text(`It is a Draw`).css({
+                    color: "green"
+                });
+                setTimeout(function () {
+                    reset();
+                }, 2000);
+            }
+            td.unbind("mouseenter");
+        });
+
+        $(".reset").click(function () {
+            reset();
+        });
+
+
     });
 
-  $("td").one("click", function() {
-    // console.log(cells)
 
-    td = $(this);
-    var X = td.data("id");
-    var Y = td.data("filter");
-    console.log(X, Y);
-    if (player == 1) {
-      message.text(`O's turn`);
-      pattern = "cross";
-      td.addClass(pattern);
-      arr[X][Y] = "X";
-      //   cells.splice(id, 1, "X");
-      player = 2;
-      win = hasPlayerWon(X, Y, "X");
-      if (win == 1) {
-        message.text(`X has Won`).css({
-          color: "red"
-        });
-        setTimeout(function() {
-          reset();
-        }, 3000);
-      }
-    } else if (player == 2) {
-      message.text(`X's turn`);
-      pattern = "circle";
-      td.addClass(pattern);
-
-      arr[X][Y] = "O";
-      //   cells.splice(id, 1, "O");
-      player = 1;
-      win = hasPlayerWon(X, Y, "O");
-
-      if (win == 1) {
-        message.text(`O has Won`).css({
-          color: "blue"
-        });
-        setTimeout(function() {
-          reset();
-        }, 3000);
-      }
-    }
-    if (win == "draw") {
-      message.text(`It is a Draw`).css({
-        color: "green"
-      });
-      setTimeout(function() {
-        reset();
-      }, 3000);
-    }
-    td.unbind("mouseenter");
-  });
-
-  $(".reset").click(function() {
-    reset();
-  });
 });
 
+
+
 function reset() {
-  location.reload(true);
+    location.reload(true);
 }
 
 function hasPlayerWon(X, Y, S) {
-  //   console.log(arr[2][3]);
-  //   console.log(S);
-  win = 0;
-  for (var i = 0; i < length; i++) {
-    if (arr[X][i] !== S) {
-      break;
-    }
-    if (i == length - 1) {
-      win = 1;
-    }
-  }
+    //   console.log(arr[2][3]);
+    //   console.log(S);
+    win = 0;
 
-  for (var i = 0; i < length; i++) {
-    if (arr[i][Y] !== S) {
-      break;
-    }
-    if (i == length - 1) {
-      win = 1;
-    }
-  }
-
-  if (X == Y) {
     for (var i = 0; i < length; i++) {
-      if (arr[i][i] !== S) {
-        break;
-      }
-      if (i == length - 1) {
-        win = 1;
-      }
+        if (arr[X][i] !== S) {
+            break;
+        }
+        if (i == length - 1) {
+            win = 1;
+        }
     }
-  }
 
-  if (X + Y == length - 1) {
     for (var i = 0; i < length; i++) {
-      if (arr[i][length - 1 - i] !== S) {
-        break;
-      }
-      if (i == length - 1) {
-        win = 1;
-      }
+        if (arr[i][Y] !== S) {
+            break;
+        }
+        if (i == length - 1) {
+            win = 1;
+        }
     }
-  }
 
-  return win;
+    if (X == Y) {
+        for (var i = 0; i < length; i++) {
+            if (arr[i][i] !== S) {
+                break;
+            }
+            if (i == length - 1) {
+                win = 1;
+            }
+        }
+    }
+
+    if (X + Y == length - 1) {
+        for (var i = 0; i < length; i++) {
+            if (arr[i][length - 1 - i] !== S) {
+                break;
+            }
+            if (i == length - 1) {
+                win = 1;
+            }
+        }
+    }
+
+    if (movecount == length * length) {
+        win = "draw";
+    }
+
+    return win;
 }
 
 // 2
@@ -167,8 +209,8 @@ function hasPlayerWon(X, Y, S) {
 //   } else {
 //     return 0;
 //   }
-//1
 
+//1
 // if (table.find('#1').hasClass(pattern) && table.find('#2').hasClass(pattern) && table.find('#3').hasClass(pattern)) {
 //     win = 1;
 // } else if (table.find('#4').hasClass(pattern) && table.find('#5').hasClass(pattern) && table.find('#6').hasClass(pattern)) {
